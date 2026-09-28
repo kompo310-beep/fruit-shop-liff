@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#087f5b">
+  <title>สวนสุขใจ | ผลไม้สดพร้อมส่ง</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    :root { color-scheme: light; }
+    body { font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
+    button, input, textarea { font: inherit; }
+    button { touch-action: manipulation; }
+    .safe-bottom { padding-bottom: max(1.25rem, env(safe-area-inset-bottom)); }
+    .fruit-card { transition: transform .18s ease, box-shadow .18s ease; }
+    .fruit-card:hover { transform: translateY(-2px); box-shadow: 0 12px 26px -18px #064e3b; }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body class="min-h-screen bg-[#f5f8f4] text-slate-800 antialiased">
+  <header class="sticky top-0 z-40 border-b border-emerald-900/10 bg-emerald-800 text-white shadow-lg shadow-emerald-950/10">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
+      <a href="#top" class="flex min-w-0 items-center gap-3" aria-label="สวนสุขใจ หน้าแรก">
+        <span class="grid h-11 w-11 shrink-0 place-items-center rounded-2xl bg-white/15 text-2xl">🍊</span>
+        <span class="min-w-0"><span class="block truncate text-lg font-extrabold tracking-tight sm:text-xl">สวนสุขใจ</span><span class="block text-xs text-emerald-100">ผลไม้สด คัดจากสวน ส่งถึงบ้าน</span></span>
+      </a>
+      <div class="flex items-center gap-2">
+        <p id="user-greeting" class="hidden text-right text-xs text-emerald-100 sm:block">กำลังเชื่อมต่อ LINE...</p>
+        <img id="user-avatar" class="hidden h-10 w-10 rounded-full border-2 border-white/80 object-cover" alt="รูปโปรไฟล์ LINE">
+        <a href="#cart" class="rounded-xl bg-white px-3 py-2 text-sm font-bold text-emerald-800 shadow-sm hover:bg-emerald-50">🛒 <span class="hidden xs:inline">ตะกร้า</span> <span id="cart-badge" class="ml-1 rounded-full bg-emerald-100 px-2 py-0.5">0</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main id="top" class="mx-auto max-w-6xl space-y-8 px-4 py-5 sm:px-6 sm:py-8 lg:px-8">
+    <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-800 via-emerald-700 to-lime-700 px-5 py-8 text-white shadow-xl shadow-emerald-900/10 sm:px-10 sm:py-12">
+      <div class="relative z-10 max-w-2xl">
+        <p class="mb-2 text-sm font-semibold text-lime-200">สด อร่อย เลือกได้ตามงบ</p>
+        <h1 class="text-3xl font-black leading-tight sm:text-5xl">เติมความสดชื่น<br class="sm:hidden">ให้ทุกวัน 🍉</h1>
+        <p class="mt-3 max-w-lg text-sm leading-6 text-emerald-50 sm:text-base">เลือกผลไม้ชิ้นโปรด จัดเป็นเซ็ตในงบ 20–150 บาท หรือเลือกชุดพร้อมทานได้ง่าย ๆ</p>
+        <a href="#shop" class="mt-6 inline-flex min-h-11 items-center rounded-xl bg-white px-5 font-bold text-emerald-800 shadow hover:bg-lime-50">เลือกผลไม้เลย <span class="ml-2">↓</span></a>
+      </div>
+      <div class="pointer-events-none absolute -right-5 -top-8 select-none text-[9rem] opacity-20 sm:right-10 sm:top-0 sm:text-[13rem]" aria-hidden="true">🍍</div>
+      <div class="pointer-events-none absolute bottom-0 right-28 hidden text-6xl opacity-40 sm:block" aria-hidden="true">🍌</div>
+    </section>
+
+    <section id="shop" class="space-y-4">
+      <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+        <div><p class="text-sm font-bold text-emerald-700">เลือกได้ตามใจ</p><h2 class="text-2xl font-extrabold tracking-tight sm:text-3xl">ผลไม้และเซ็ตแนะนำ</h2></div>
+        <p class="text-sm text-slate-500">ราคาเริ่มต้น ฿20 • คละรายการได้</p>
+      </div>
+      <div class="flex flex-wrap gap-2" role="tablist" aria-label="ประเภทสินค้า">
+        <button id="tab-premade" onclick="switchTab('premade')" class="tab-button rounded-full bg-emerald-700 px-4 py-2.5 text-sm font-bold text-white shadow-sm" aria-selected="true">🍱 เซ็ตพร้อมทาน</button>
+        <button id="tab-custom" onclick="switchTab('custom')" class="tab-button rounded-full bg-white px-4 py-2.5 text-sm font-bold text-slate-600 ring-1 ring-slate-200 hover:ring-emerald-300" aria-selected="false">🧺 จัดเซ็ตเอง</button>
+      </div>
+
+      <section id="section-premade" aria-labelledby="tab-premade" class="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        <article class="fruit-card flex flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"><div class="flex items-start gap-3"><span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-orange-50 text-3xl">🍊</span><div class="min-w-0 flex-1"><h3 class="font-bold">เซ็ตสดชื่นไซซ์เล็ก</h3><p class="mt-1 text-sm text-slate-500">ส้ม + กล้วยหอม</p><p class="mt-2 text-lg font-extrabold text-emerald-700">฿20</p></div></div><button onclick="addPremade('เซ็ตสดชื่นไซซ์เล็ก',20)" class="mt-4 min-h-11 w-full rounded-xl bg-emerald-700 px-4 font-bold text-white hover:bg-emerald-800">+ เพิ่มลงตะกร้า</button></article>
+        <article class="fruit-card flex flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"><div class="flex items-start gap-3"><span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-yellow-50 text-3xl">🍌</span><div class="min-w-0 flex-1"><h3 class="font-bold">เซ็ตอิ่มท้อง</h3><p class="mt-1 text-sm text-slate-500">กล้วยหอม + ฝรั่ง</p><p class="mt-2 text-lg font-extrabold text-emerald-700">฿35</p></div></div><button onclick="addPremade('เซ็ตอิ่มท้อง',35)" class="mt-4 min-h-11 w-full rounded-xl bg-emerald-700 px-4 font-bold text-white hover:bg-emerald-800">+ เพิ่มลงตะกร้า</button></article>
+        <article class="fruit-card flex flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"><div class="flex items-start gap-3"><span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-lime-50 text-3xl">🍈</span><div class="min-w-0 flex-1"><h3 class="font-bold">เซ็ตผลไม้บ้าน ๆ</h3><p class="mt-1 text-sm text-slate-500">แตงโม + มะละกอ + ชมพู่</p><p class="mt-2 text-lg font-extrabold text-emerald-700">฿50</p></div></div><button onclick="addPremade('เซ็ตผลไม้บ้าน ๆ',50)" class="mt-4 min-h-11 w-full rounded-xl bg-emerald-700 px-4 font-bold text-white hover:bg-emerald-800">+ เพิ่มลงตะกร้า</button></article>
+        <article class="fruit-card flex flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"><div class="flex items-start gap-3"><span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-red-50 text-3xl">🍉</span><div class="min-w-0 flex-1"><h3 class="font-bold">เซ็ตคลายร้อน</h3><p class="mt-1 text-sm text-slate-500">แตงโม + สับปะรด + ส้ม</p><p class="mt-2 text-lg font-extrabold text-emerald-700">฿79</p></div></div><button onclick="addPremade('เซ็ตคลายร้อน',79)" class="mt-4 min-h-11 w-full rounded-xl bg-emerald-700 px-4 font-bold text-white hover:bg-emerald-800">+ เพิ่มลงตะกร้า</button></article>
+        <article class="fruit-card flex flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"><div class="flex items-start gap-3"><span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-pink-50 text-3xl">🍓</span><div class="min-w-0 flex-1"><h3 class="font-bold">เซ็ตสุขภาพยอดนิยม</h3><p class="mt-1 text-sm text-slate-500">ฝรั่ง + แอปเปิล + แก้วมังกร</p><p class="mt-2 text-lg font-extrabold text-emerald-700">฿109</p></div></div><button onclick="addPremade('เซ็ตสุขภาพยอดนิยม',109)" class="mt-4 min-h-11 w-full rounded-xl bg-emerald-700 px-4 font-bold text-white hover:bg-emerald-800">+ เพิ่มลงตะกร้า</button></article>
+        <article class="fruit-card flex flex-col rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"><div class="flex items-start gap-3"><span class="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-purple-50 text-3xl">🍍</span><div class="min-w-0 flex-1"><h3 class="font-bold">เซ็ตจัดเต็มแบ่งกัน</h3><p class="mt-1 text-sm text-slate-500">ผลไม้ตามฤดูกาล 4–5 ชนิด</p><p class="mt-2 text-lg font-extrabold text-emerald-700">฿150</p></div></div><button onclick="addPremade('เซ็ตจัดเต็มแบ่งกัน',150)" class="mt-4 min-h-11 w-full rounded-xl bg-emerald-700 px-4 font-bold text-white hover:bg-emerald-800">+ เพิ่มลงตะกร้า</button></article>
+      </section>
+
+      <section id="section-custom" class="hidden space-y-4" aria-labelledby="tab-custom">
+        <div class="rounded-2xl border border-emerald-100 bg-emerald-50 p-4 text-sm text-emerald-900"><strong>จัดเซ็ตตามงบของคุณ</strong><p class="mt-1 text-emerald-800">เลือกราคา 20, 50, 80, 100 หรือ 150 บาท แล้วเลือกผลไม้ที่ชอบได้สูงสุด 5 ชนิด</p></div>
+        <div class="grid gap-4 lg:grid-cols-[1.2fr_.8fr]">
+          <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
+            <div class="mb-3 flex items-center justify-between gap-2"><h3 class="font-bold">เลือกผลไม้ในเซ็ต</h3><span id="custom-count" class="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800">0/5 ชนิด</span></div>
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="กล้วยหอม" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍌 กล้วยหอม</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="ส้มเขียวหวาน" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍊 ส้มเขียวหวาน</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="ฝรั่ง" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍐 ฝรั่ง</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="แตงโม" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍉 แตงโม</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="มะละกอ" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍈 มะละกอ</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="สับปะรด" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍍 สับปะรด</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="ชมพู่" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍎 ชมพู่</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="มะม่วง" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🥭 มะม่วง</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="แก้วมังกร" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🐉 แก้วมังกร</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="แอปเปิล" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍎 แอปเปิล</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="สับปะรดภูแล" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍍 สับปะรดภูแล</span></label>
+              <label class="flex min-h-12 cursor-pointer items-center gap-3 rounded-xl bg-slate-50 p-3 hover:bg-emerald-50"><input type="checkbox" value="องุ่น" onchange="handleFruitCheck(this)" class="custom-checkbox h-5 w-5 accent-emerald-700"><span>🍇 องุ่น</span></label>
+            </div>
+          </div>
+          <div class="h-fit rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
+            <h3 class="font-bold">กำหนดงบเซ็ต</h3>
+            <p class="mt-1 text-sm text-slate-500">เลือกงบที่ต้องการ</p>
+            <div class="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-5 lg:grid-cols-3">
+              <label class="cursor-pointer"><input class="peer sr-only" type="radio" name="custom-price" value="20"><span class="block rounded-xl border border-slate-200 p-2 text-center text-sm font-bold peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white">฿20</span></label>
+              <label class="cursor-pointer"><input class="peer sr-only" type="radio" name="custom-price" value="50" checked><span class="block rounded-xl border border-slate-200 p-2 text-center text-sm font-bold peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white">฿50</span></label>
+              <label class="cursor-pointer"><input class="peer sr-only" type="radio" name="custom-price" value="80"><span class="block rounded-xl border border-slate-200 p-2 text-center text-sm font-bold peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white">฿80</span></label>
+              <label class="cursor-pointer"><input class="peer sr-only" type="radio" name="custom-price" value="100"><span class="block rounded-xl border border-slate-200 p-2 text-center text-sm font-bold peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white">฿100</span></label>
+              <label class="cursor-pointer"><input class="peer sr-only" type="radio" name="custom-price" value="150"><span class="block rounded-xl border border-slate-200 p-2 text-center text-sm font-bold peer-checked:border-emerald-700 peer-checked:bg-emerald-700 peer-checked:text-white">฿150</span></label>
+            </div>
+            <button onclick="addCustomSet()" class="mt-5 min-h-12 w-full rounded-xl bg-emerald-700 px-4 font-bold text-white hover:bg-emerald-800">เพิ่มเซ็ตลงตะกร้า</button>
+            <p class="mt-2 text-center text-xs text-slate-400">ผลไม้ขึ้นอยู่กับฤดูกาลและสต็อกของร้าน</p>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section id="cart" class="grid gap-4 lg:grid-cols-2">
+      <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
+        <h2 class="text-lg font-extrabold">🛒 รายการสั่งซื้อ</h2>
+        <div id="cart-list" class="mt-2 divide-y divide-slate-100 text-sm text-slate-600"><p class="py-3 text-sm text-slate-400">ยังไม่มีรายการสินค้า</p></div>
+        <div class="flex justify-between border-t border-slate-200 pt-3 text-lg font-extrabold"><span>ยอดรวม</span><span id="cart-total" class="text-emerald-700">฿0</span></div>
+      </div>
+      <div class="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:p-5">
+        <h2 class="text-lg font-extrabold">📍 ข้อมูลผู้รับ</h2>
+        <div class="mt-3 space-y-3">
+          <div><label for="cust-name" class="mb-1 block text-sm font-medium text-slate-600">ชื่อผู้รับ</label><input type="text" id="cust-name" autocomplete="name" placeholder="ชื่อ-นามสกุล" class="min-h-11 w-full rounded-xl border border-slate-200 px-3 text-base focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"></div>
+          <div><label for="cust-phone" class="mb-1 block text-sm font-medium text-slate-600">เบอร์โทรศัพท์</label><input type="tel" id="cust-phone" inputmode="tel" autocomplete="tel" placeholder="08xxxxxxxx" class="min-h-11 w-full rounded-xl border border-slate-200 px-3 text-base focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"></div>
+          <div><label for="cust-address" class="mb-1 block text-sm font-medium text-slate-600">ที่อยู่จัดส่ง</label><textarea id="cust-address" rows="3" autocomplete="street-address" placeholder="บ้านเลขที่ ถนน แขวง/ตำบล เขต/อำเภอ จังหวัด" class="w-full rounded-xl border border-slate-200 px-3 py-2 text-base focus:border-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-100"></textarea></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid gap-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm sm:grid-cols-[1fr_auto] sm:items-center sm:p-5">
+      <div><h2 class="text-lg font-extrabold">💸 ชำระเงิน</h2><p class="mt-1 text-sm text-slate-500">โอนผ่านพร้อมเพย์และแนบสลิปเพื่อยืนยันรายการ</p><label for="slip-file" class="mt-3 block text-sm font-medium text-slate-600">รูปสลิปโอนเงิน</label><input type="file" id="slip-file" accept="image/*" capture="environment" onchange="previewSlip(event)" class="mt-1 block w-full max-w-md text-sm text-slate-600 file:mr-3 file:min-h-10 file:rounded-lg file:border-0 file:bg-emerald-50 file:px-4 file:font-bold file:text-emerald-800"></div>
+      <div class="flex items-center gap-3 sm:flex-col"><div class="grid h-28 w-28 shrink-0 place-items-center rounded-xl border border-dashed border-slate-300 bg-slate-50 p-2 text-center text-xs text-slate-500"><span>พื้นที่สำหรับ<br>QR พร้อมเพย์</span></div><div id="slip-preview-container" class="hidden text-center"><p class="mb-1 text-xs font-bold text-emerald-700">✓ สลิปที่เลือก</p><img id="slip-preview-img" class="max-h-40 max-w-28 rounded-lg border object-contain" src="#" alt="พรีวิวสลิปโอนเงิน"></div></div>
+    </section>
+
+    <div class="safe-bottom"><button onclick="submitOrder()" class="min-h-14 w-full rounded-2xl bg-emerald-700 px-5 text-lg font-extrabold text-white shadow-lg shadow-emerald-900/15 transition hover:bg-emerald-800 active:scale-[.99]">ยืนยันการสั่งซื้อ</button><p class="mt-2 text-center text-xs text-slate-400">ราคาชุดที่จัดเองเริ่มต้น ฿20 ถึง ฿150</p></div>
+  </main>
+  <footer class="border-t border-slate-200 bg-white px-4 py-5 text-center text-xs text-slate-500">สวนสุขใจ • ผลไม้สดคัดคุณภาพทุกวัน</footer>
+
+  <script>
+    // ใส่ LIFF ID ของร้านก่อนนำขึ้นใช้งานจริง
+    const LIFF_ID = "YOUR_LIFF_ID";
+    async function initLiff() {
+      const greeting = document.getElementById('user-greeting');
+      try {
+        if (LIFF_ID !== 'YOUR_LIFF_ID' && typeof liff !== 'undefined') {
+          await liff.init({ liffId: LIFF_ID });
+          if (liff.isLoggedIn()) {
+            const profile = await liff.getProfile();
+            greeting.textContent = `สวัสดีคุณ ${profile.displayName}`;
+            const avatar = document.getElementById('user-avatar');
+            if (profile.pictureUrl) { avatar.src = profile.pictureUrl; avatar.classList.remove('hidden'); }
+          } else greeting.textContent = 'เข้าสู่ระบบ LINE เพื่อสั่งซื้อ';
+        } else greeting.textContent = 'เลือกผลไม้สดได้เลย';
+      } catch (err) { console.error('LIFF Init Error:', err); greeting.textContent = 'เลือกผลไม้สดได้เลย'; }
+    }
+    initLiff();
+
+    let cart = [];
+    let selectedFruits = [];
+    const MAX_CUSTOM_FRUITS = 5;
+
+    function switchTab(tab) {
+      const premade = tab === 'premade';
+      document.getElementById('section-premade').classList.toggle('hidden', !premade);
+      document.getElementById('section-custom').classList.toggle('hidden', premade);
+      ['premade', 'custom'].forEach(name => {
+        const button = document.getElementById(`tab-${name}`);
+        button.setAttribute('aria-selected', String(name === tab));
+        button.className = `tab-button rounded-full px-4 py-2.5 text-sm font-bold ${name === tab ? 'bg-emerald-700 text-white shadow-sm' : 'bg-white text-slate-600 ring-1 ring-slate-200 hover:ring-emerald-300'}`;
+      });
+    }
+    function addPremade(name, price) { cart.push({ name, price }); renderCart(); }
+    function handleFruitCheck(checkbox) {
+      if (checkbox.checked) {
+        if (selectedFruits.length >= MAX_CUSTOM_FRUITS) {
+          alert(`เลือกผลไม้ได้สูงสุด ${MAX_CUSTOM_FRUITS} ชนิด`); checkbox.checked = false; return;
+        }
+        selectedFruits.push(checkbox.value);
+      } else selectedFruits = selectedFruits.filter(fruit => fruit !== checkbox.value);
+      document.getElementById('custom-count').textContent = `${selectedFruits.length}/${MAX_CUSTOM_FRUITS} ชนิด`;
+    }
+    function addCustomSet() {
+      if (!selectedFruits.length) { alert('กรุณาเลือกผลไม้อย่างน้อย 1 ชนิด'); return; }
+      const price = Number(document.querySelector('input[name="custom-price"]:checked').value);
+      cart.push({ name: `เซ็ตจัดเอง (${selectedFruits.join(', ')})`, price });
+      renderCart();
+      document.querySelectorAll('.custom-checkbox').forEach(box => { box.checked = false; });
+      selectedFruits = [];
+      document.getElementById('custom-count').textContent = `0/${MAX_CUSTOM_FRUITS} ชนิด`;
+    }
+    function removeCartItem(index) { cart.splice(index, 1); renderCart(); }
+    function renderCart() {
+      const container = document.getElementById('cart-list');
+      let total = 0;
+      document.getElementById('cart-badge').textContent = cart.length;
+      if (!cart.length) {
+        container.innerHTML = '<p class="py-3 text-sm text-slate-400">ยังไม่มีรายการสินค้า</p>';
+        document.getElementById('cart-total').textContent = '฿0'; return;
+      }
+      container.innerHTML = cart.map((item, index) => {
+        total += item.price;
+        const safeName = item.name.replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+        return `<div class="flex items-center justify-between gap-3 py-3"><div class="min-w-0"><p class="break-words font-semibold text-slate-800">${safeName}</p><p class="mt-0.5 font-bold text-emerald-700">฿${item.price}</p></div><button onclick="removeCartItem(${index})" aria-label="ลบ ${safeName}" class="min-h-10 shrink-0 rounded-lg px-3 text-sm font-semibold text-rose-600 hover:bg-rose-50">ลบ</button></div>`;
+      }).join('');
+      document.getElementById('cart-total').textContent = `฿${total}`;
+    }
+    let slipObjectUrl = null;
+    function previewSlip(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (slipObjectUrl) URL.revokeObjectURL(slipObjectUrl);
+      slipObjectUrl = URL.createObjectURL(file);
+      document.getElementById('slip-preview-img').src = slipObjectUrl;
+      document.getElementById('slip-preview-container').classList.remove('hidden');
+    }
+    function submitOrder() {
+      if (!cart.length) { alert('กรุณาเลือกสินค้าลงตะกร้าก่อน'); return; }
+      const name = document.getElementById('cust-name').value.trim();
+      const phone = document.getElementById('cust-phone').value.trim();
+      const address = document.getElementById('cust-address').value.trim();
+      const slip = document.getElementById('slip-file').files[0];
+      if (!name || !phone || !address) { alert('กรุณากรอกชื่อ เบอร์โทรศัพท์ และที่อยู่ให้ครบ'); return; }
+      if (!slip) { alert('กรุณาแนบรูปสลิปโอนเงิน'); return; }
+      alert('รับคำสั่งซื้อเรียบร้อยแล้ว! กรุณาติดต่อร้านเพื่อยืนยันรายการและการจัดส่ง');
+      if (typeof liff !== 'undefined' && liff.isInClient && liff.isInClient()) liff.closeWindow();
+    }
+  </script>
+</body>
+</html>
